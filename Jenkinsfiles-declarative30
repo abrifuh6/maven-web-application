@@ -6,7 +6,7 @@ pipeline{
   stages {
     stage('1GetCode'){
       steps{
-        sh "echo 'cloning the latest application version' "
+        sh "echo 'cloning the latest application version in scm' "
         git branch: 'feature', credentialsId: 'gitHubCredentials', url: 'https://github.com/LandmakTechnology/maven-web-application'
       }
     }
