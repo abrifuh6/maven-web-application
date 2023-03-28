@@ -1,66 +1,61 @@
 pipeline{
-  agent any 
-  tools {
-    maven "maven3.6.0"
-  }  
-  stages {
-    stage('1GetCode'){
-      steps{
-        sh "echo 'cloning the latest application version' "
-        git branch: 'feature', credentialsId: 'gitHubCredentials', url: 'https://github.com/LandmakTechnology/maven-web-application'
-      }
-    }
-    stage('3Test+Build'){
-      steps{
-        sh "echo 'running JUnit-test-cases' "
-        sh "echo 'testing must passed to create artifacts ' "
-        sh "mvn clean package"
-      }
-    }
-    /*
-    stage('4CodeQuality'){
-      steps{
-        sh "echo 'Perfoming CodeQualityAnalysis' "
-        sh "mvn sonar:sonar"
-      }
-    }
-    stage('5uploadNexus'){
-      steps{
-        sh "mvn deploy"
-      }
-    } 
-    stage('8deploy2prod'){
-      steps{
-        deploy adapters: [tomcat8(credentialsId: 'tomcat-credentials', path: '', url: 'http://35.170.249.131:8080/')], contextPath: null, war: 'target/*war'
-      }
-    }
-}
-  post{
-    always{
-      emailext body: '''Hey guys
-Please check build status.
+	agent any 
+	tools{
+		maven "maven3.9.1"
+	}
+	stages{
+		stage('1GetCode'){
+			steps{
+				sh "echo 'Cloning the latest application version'"
+				git credentialsId: 'github-cred', url: 'https://github.com/abrifuh6/maven-web-app'
+			}
+		}
+		stage('2Test&Build'){
+			steps{
+				sh " echo 'Running JUnit-test-cases' "
+				sh " echo 'Test cases must pass to build artifacts for deployment' "
+				sh "mvn clean package"
+			}
+		}
+		/*stage('3Sonarqube+CodeQuality'){
+			steps{
+				sh " echo 'Performing CodeQuality Analysis with SonarQube' "
+				sh "mvn sonar:sonar"
+			}
+		}
+		stage('4UploadArtifacts'){
+			steps{
+				sh " echo 'Uploading Built Artifacts to Nexus'"
+				sh "mvn deploy"
+			}
+		}
+		stage('5DeploytoProd'){
+			steps{
+				sh "echo 'Deploy application to tomcat prod-servers' "
+			 deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://44.211.46.165:8080/')], contextPath: null, war: 'target/*war'
+			}
+		}*/
+	}
+	// options{}
+	/*post{
+		always{
+			emailext body: '''Hello Guys,
+Please check build status
 
-Thanks
-Landmark 
-+1 437 215 2483''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'paypal-team@gmail.com'
-    }
-    success{
-      emailext body: '''Hey guys
-Good job build and deployment is successful.
+Buamtech Consulting Inc.''', recipientProviders: [buildUser(), contributor(), upstreamDevelopers()], subject: 'Success'
+		}
+		success{
+	      emailext body: '''Hello Guys,
+ Great Job , Build and deployment Successful
 
-Thanks
-Landmark 
-+1 437 215 2483''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'paypal-team@gmail.com'
-    } 
-    failure{
-      emailext body: '''Hey guys
-Build failed. Please resolve issues.
+Buamtech Consulting Inc.''', recipientProviders: [buildUser(), contributor(), upstreamDevelopers()], subject: 'Success'
+		}
+		failure{
+	emailext body: '''Hello Guys,
+ Build and deployment Failed, Please reslove Issue/Issues
 
-Thanks
-Landmark 
-+1 437 215 2483''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'paypal-team@gmail.com'
-    }
-  } 
-  */
-}
-}
+Buamtech Consulting Inc.''', recipientProviders: [buildUser(), contributor(), upstreamDevelopers()], subject: 'Success'
+		}
+	}	*/
+  }
+
